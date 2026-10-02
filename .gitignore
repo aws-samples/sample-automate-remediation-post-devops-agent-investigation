@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+*.egg
+.venv/
+venv/
+env/
+.python-version
+
+# AWS CDK
+cdk.out/
+.cdk.staging/
+cdk.context.json
+
+# Pytest
+.pytest_cache/
+tests/__pycache__/
+
+# Coverage reports
+.coverage
+htmlcov/
+coverage.xml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment / secrets
+.env
+*.pem
+*.key
+
+# Local database files
+*.sqlite
+*.db
+
+# Build / run logs
+build.log
+logs/
+
+# draw.io backup and autosave files (keep the .drawio source)
+.$*.drawio.bkp
+*.drawio.bkp
+*.dtmp
