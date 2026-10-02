@@ -26,12 +26,10 @@ This repository contains an automated remediation pipeline for AWS DevOps Agent.
         └── update_lambda_config.py     # Tool Lambda for Lambda config operations
 ```
 
-The Lambda runtime's built-in boto3 already includes the AWS DevOps Agent SDK, so no custom boto3 layer is required.
-
 ## Deployment
 
 ### Prerequisites
-- Python 3.12+
+- Python 3.14
 - AWS CDK CLI (`npm install -g aws-cdk`)
 - AWS credentials configured
 - An active AWS DevOps Agent space
@@ -65,7 +63,7 @@ To test the end-to-end flow, create a Lambda function that always times out:
 
 1. Create a file `lambda_function.py` with a function that sleeps for 10 seconds.
 2. Create an IAM execution role `devops-agent-timeout-role` with `AWSLambdaBasicExecutionRole`.
-3. Deploy the function `devops-agent-timeout` with `--timeout 3` and Python 3.12 runtime.
+3. Deploy the function `devops-agent-timeout` with `--timeout 3` and Python 3.14 runtime.
 4. Invoke the function to generate timeout errors.
 5. Open AWS DevOps Agent and investigate: "What is happening with the devops-agent-timeout function?"
 
@@ -75,7 +73,16 @@ The investigation completion triggers the remediation pipeline automatically.
 
 1. `cdk destroy` to remove the remediation stack.
 2. Delete the test function: `aws lambda delete-function --function-name devops-agent-timeout`
-3. Delete the IAM role and CloudWatch log group for the test function.
+3. Delete the IAM role and CloudWatch log group for the test function:
+   ```bash
+   aws iam detach-role-policy \
+     --role-name devops-agent-timeout-role \
+     --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+   aws iam delete-role --role-name devops-agent-timeout-role
+
+   aws logs delete-log-group --log-group-name /aws/lambda/devops-agent-timeout
+   ```
 
 ## Adding New Remediation Tools
 
